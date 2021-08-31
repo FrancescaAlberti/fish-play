@@ -3,12 +3,12 @@ function preload() {
     red_fish_swim = loadAnimation("img/red_swim/00___cartoon_fish_06_red_swim.png", "img/red_swim/11___cartoon_fish_06_red_swim.png");
     red_fish_idle = loadAnimation("img/red_idle/00___cartoon_fish_06_red_idle.png", "img/red_idle/11___cartoon_fish_06_red_idle.png");
     red_fish_swim.frameDelay = 20;
-    red_fish_idle.frameDelay = 20;
+    red_fish_idle.frameDelay = 30;
 
     yellow_fish_swim = loadAnimation("img/yellow_swim/00___cartoon_fish_06_yellow_swim.png", "img/yellow_swim/11___cartoon_fish_06_yellow_swim.png");
     yellow_fish_idle = loadAnimation("img/yellow_idle/00___cartoon_fish_06_yellow_idle.png", "img/yellow_idle/11___cartoon_fish_06_yellow_idle.png");
     yellow_fish_swim.frameDelay = 20;
-    yellow_fish_idle.frameDelay = 20;
+    yellow_fish_idle.frameDelay = 30;
 
 }
 let fishNumber = 5;
@@ -26,7 +26,6 @@ function setup() {
         fishSprite.addAnimation('fish_swim', eval(fishColor + "_fish_swim"));
         fishSprite.addAnimation('fish_idle', eval(fishColor + "_fish_idle"));
         fishSprite.setDefaultCollider();
-        fishSprite.mirrorX(-1);
         fishSprite.setSpeed(1, 10);
         fishSprite.mouseActive = true;
         fishSprite.debug = false;
@@ -34,6 +33,7 @@ function setup() {
         Fishes.add(fishSprite);
     }
 
+    Food = new Group();
     // create walls
     wallsTB = new Group();
     let topBorder = createSprite(width / 2, -10, width, 10);
@@ -58,33 +58,43 @@ function setup() {
 function draw() {
     background(color(240, 255, 255));
     Fishes.bounce(wallsTB);
-    Fishes.bounce(wallsLR, changeDirection);
-    /*     Fishes.collide(Food, eat);
-        Food.collide(wallsTB);
-        Food.displace(Food); */
-
-    /*  if (Food.length > 0) {
-         for (let i = 0; i < Fishes.length; i++) {
-             for (let j = 0; i < Food.length; i++)
-                 Fishes[i].attractionPoint(0.01, Food[j].position.x, Food[j].position.x)
-         }
-     } */
+    Fishes.bounce(wallsLR);
+    Food.collide(wallsTB);
+    Food.displace(Food);
+    Food.collide(Fishes);
+    move(Fishes);
+    eat(Food);
     drawSprites();
-
 }
 
-function changeDirection(target) {
-    let currentMirrorX = target.mirrorX();
-    target.mirrorX(currentMirrorX * -1);
+function move(objArray) {
+    objArray.forEach(obj => {
+        let direction = obj.getDirection();
+        //moving left
+        if (abs(direction) >= 90) {
+            console.log("left");
+            obj.mirrorX() != 1 ? obj.mirrorX(1) : false;
+        }
+        //moving right 
+        else if (abs(direction) < 90) {
+            console.log("right")
+            obj.mirrorX() != -1 ? obj.mirrorX(-1) : false;
+        }
+    });
 }
-/* 
-function eat(fish, food) {
-    if (fish.touching.right || fish.touching.left) {
-        Food.remove(food);
-        food.remove();
-        debugger;
-    }
-} */
+
+function eat(objArray) {
+
+    objArray.forEach(obj => {
+        if (obj.touching.left || obj.touching.left || obj.touching.top || obj.touching.bottom) {
+            //remove from Group
+            objArray.remove(obj);
+            //remove sprite
+            obj.remove();
+        }
+    });
+
+}
 
 function mouseMoved() {
     if (typeof(Fishes) !== "undefined") {
@@ -100,12 +110,17 @@ function mouseMoved() {
         }
     }
 }
-/* 
+
 function mouseClicked() {
+    console.log(mouseX + " - " + mouseY);
 
     let food = createSprite(mouseX, mouseY, 10, 10);
     food.setDefaultCollider();
-    food.setSpeed(0.5, 90);
-    food.debug = true;
+    food.setSpeed(0.5, random(80, 100));
+    food.debug = false;
     Food.add(food);
-} */
+
+    /* Fishes.forEach(fish => {
+        fish.attractionPoint(0.05, mouseX, mouseY);
+    }); */
+}
