@@ -1,14 +1,38 @@
 <html>
 
 <head>
-    <title>Fish tank with p5.play</title>
+    <title>Fish tank</title>
     <script src="libs/p5.min.js"></script>
     <script src="libs/p5.play.js"></script>
     <script src="main.js"></script>
 </head>
 
-<body>
+<body style="font-family: system-ui, sans-serif; font-size:large">
+    <div style="text-align: center">
+        <h1>An interactive experiment with p5.play</h1>
+        <div style="display:flex;flex-wrap: wrap;justify-content: space-around; margin-top: 20px">
+            <div>
+                <div id="canvas-container" style="border: 1px solid black"></div>
+            </div>
+            <div style="max-width:500px">
 
+                <p class>
+                    <b>ℹ️ About the project </b>
+                    <br>This project is a personal exploration of the p5.play library, built on top of p5.js. It simulates a small digital fish tank where each fish is an independent sprite with its own movement and behavior.
+                    <br>Every time the page is refreshed, the tank is repopulated with five new fish, each generated with random colors, sizes, and initial positions, making every visit slightly different.
+                    <br><br>
+                    <b>Hover interaction</b>
+                    <br>Hovering over a fish makes it pause for a moment, as if startled or curious, before it swims away again with a new speed and direction.
+                    <br><br>
+                    <b>Click interaction</b>
+                    <br>Clicking anywhere in the tank drops a small food flake, and the fish immediately react by moving toward it to eat.
+                    <br><br>
+                    <b>Why this experiment</b>
+                    <br>The project is a playful way to experiment with sprite behavior, motion dynamics, randomness, and user interaction in creative coding, a simple scene that becomes surprisingly alive through a few lines of logic.
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

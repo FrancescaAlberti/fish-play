@@ -15,7 +15,8 @@ let fishNumber = 5;
 let fishSprite;
 
 function setup() {
-    createCanvas(800, 500);
+    let cnv = createCanvas(800, 500);
+    cnv.parent("canvas-container");
 
     Fishes = new Group();
     //create fishes
@@ -70,6 +71,10 @@ function draw() {
 function move(objArray) {
     objArray.forEach(obj => {
         let direction = obj.getDirection();
+        if (obj.getSpeed < 0.1) {
+            obj.setSpeed(1, 10);
+        }
+
         //moving left
         if (abs(direction) >= 90) {
             console.log("left");
@@ -97,7 +102,7 @@ function eat(objArray) {
 }
 
 function mouseMoved() {
-    if (typeof(Fishes) !== "undefined") {
+    if (typeof (Fishes) !== "undefined") {
         for (let i = 0; i < Fishes.length; i++) {
             if (Fishes[i].mouseIsOver) {
                 Fishes[i].friction = 0.25;
@@ -116,11 +121,11 @@ function mouseClicked() {
 
     let food = createSprite(mouseX, mouseY, 10, 10);
     food.setDefaultCollider();
-    food.setSpeed(0.5, random(80, 100));
+    food.setSpeed(0.1, random(80, 100));
     food.debug = false;
     Food.add(food);
 
-    /* Fishes.forEach(fish => {
-        fish.attractionPoint(0.05, mouseX, mouseY);
-    }); */
+    Fishes.forEach(fish => {
+        fish.attractionPoint(1, mouseX, mouseY);
+    });
 }
